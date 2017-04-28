@@ -1,0 +1,7 @@
+test
+contributing.md
+.editorconfig
+coverage
+.nyc_output
+yarn.lock
+.travis.yml

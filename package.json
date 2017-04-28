@@ -1,0 +1,30 @@
+{
+  "name": "reshape-preact-ssr",
+  "description": "server render preact components and use them like custom elements",
+  "version": "0.0.0",
+  "author": "reshape",
+  "ava": {
+    "verbose": "true"
+  },
+  "bugs": "https://github.com/reshape/reshape-preact-ssr/issues",
+  "devDependencies": {
+    "ava": "^0.19.1",
+    "codecov": "^2.1.0",
+    "nyc": "^10.2.0",
+    "snazzy": "^7.0.0",
+    "standard": "^10.0.2"
+  },
+  "engines": {
+    "node": ">= 6"
+  },
+  "homepage": "https://github.com/reshape/reshape-preact-ssr",
+  "license": "MIT",
+  "main": "lib",
+  "repository": "reshape/reshape-preact-ssr",
+  "scripts": {
+    "codecov": "nyc report -r lcovonly && codecov",
+    "coverage": "nyc ava && nyc report --reporter=html && open ./coverage/index.html",
+    "lint": "standard | snazzy",
+    "test": "nyc ava"
+  }
+}
