@@ -1,5 +1,7 @@
 # reshape-preact-ssr
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/reshape/preact-ssr.svg)](https://greenkeeper.io/)
+
 [![npm](https://img.shields.io/npm/v/reshape-preact-ssr.svg?style=flat-square)](https://npmjs.com/package/reshape-preact-ssr)
 [![tests](https://img.shields.io/travis/reshape/reshape-preact-ssr.svg?style=flat-square)](https://travis-ci.org/reshape/reshape-preact-ssr?branch=master)
 [![dependencies](https://img.shields.io/david/reshape/reshape-preact-ssr.svg?style=flat-square)](https://david-dm.org/reshape/reshape-preact-ssr)
