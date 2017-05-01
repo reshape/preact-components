@@ -13,6 +13,14 @@
     "reshape-parser": "^0.2.1",
     "reshape-plugin-util": "^0.2.1"
   },
+  "keywords": [
+    "reshape-plugin",
+    "react",
+    "preact",
+    "server-side-render",
+    "ssr",
+    "custom-elements"
+  ],
   "devDependencies": {
     "ava": "^0.19.1",
     "codecov": "^2.1.0",
