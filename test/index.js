@@ -30,3 +30,21 @@ test('multi element, different props', (t) => {
       t.is(res.output(), '<p>the value of foo is "bar"</p><p>wow</p><p>the value of foo is "wow"</p>')
     })
 })
+
+test('renders children', (t) => {
+  const MyComponent = ({ foo, children }) => {
+    return h('div', { class: 'parent' }, children)
+  }
+
+  const c2 = () => {
+    return h('div', { class: 'wow' }, 'hello from c2')
+  }
+
+  const html = "<my-component foo='bar'><p>wow</p><div><c2></c2></div></my-component>"
+
+  return reshape({ plugins: [ssr({ 'my-component': MyComponent, c2 })] })
+    .process(html)
+    .then((res) => {
+      t.is(res.output(), '<div class="parent"><p>wow</p><div><div class="wow">hello from c2</div></div></div>')
+    })
+})
