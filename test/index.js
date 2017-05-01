@@ -33,7 +33,7 @@ test('multi element, different props', (t) => {
 
 test('renders children', (t) => {
   const MyComponent = ({ foo, children }) => {
-    return h('div', { class: 'parent' }, children)
+    return h('div', { class: 'parent' }, 'hello', children)
   }
 
   const c2 = () => {
@@ -45,6 +45,6 @@ test('renders children', (t) => {
   return reshape({ plugins: [ssr({ 'my-component': MyComponent, c2 })] })
     .process(html)
     .then((res) => {
-      t.is(res.output(), '<div class="parent"><p>wow</p><div><div class="wow">hello from c2</div></div></div>')
+      t.is(res.output(), '<div class="parent">hello<p>wow</p><div><div class="wow">hello from c2</div></div></div>')
     })
 })
