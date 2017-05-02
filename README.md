@@ -35,7 +35,7 @@ reshape({ plugins: [ssr({ 'my-component': MyComponent })] })
   })
 ```
 
-#### Rehydrating Initial State
+#### Hydrating Initial State
 
 So there is one case where you might want some additional logic to avoid duplication. Luckily, we have this logic ready to go, and will walk you through both the use case and solution here. So imagine you have a component like this:
 
@@ -103,9 +103,9 @@ render(
 )
 ```
 
-Ok so this works, but now we have some seriously non-DRY code. Now our markup has to be repeated both in our html for the initial static render, and in the client-side js for the client render. Luckily, reshape-preact-ssr has got your back. By default, it takes the initial html you used to render your preact element, parsed into a reshape AST and compressed as efficiently as possible, and gives it to your element as a prop called `_ssr`. It also provides a helper that you can use to decompress and rehydrate it into a vdom tree that can be directly rendered by preact. So let's take advantage of this in our code and completely cut out all repetition - starting with our component.
+Ok so this works, but now we have some seriously non-DRY code. Now our markup has to be repeated both in our html for the initial static render, and in the client-side js for the client render. Luckily, reshape-preact-ssr has got your back. By default, it takes the initial html you used to render your preact element, parsed into a reshape AST and compressed as efficiently as possible, and gives it to your element as a prop called `_ssr`. It also provides a helper that you can use to decompress and hydrate it into a vdom tree that can be directly rendered by preact. So let's take advantage of this in our code and completely cut out all repetition - starting with our component.
 
-What we'll do here is put our compressed initial state on a data attribute so that our client-side js can pick it up and rehydrate:
+What we'll do here is put our compressed initial state on a data attribute so that our client-side js can pick it up and hydrate:
 
 ```js
 export default class SortableList {
@@ -139,7 +139,7 @@ const sortableEl = document.querySelector('.sortable')
 console.log(sortable.dataset.ssr)
 ```
 
-Looking good -- now we can pull in `reshape-preact-ssr`'s helper function that will rehydrate the initial state as a vdom tree that's directly renderable by preact. We just need to pass it the compressed initial state, and a remapping back from the custom element name to the actual component as we required it on the client side.
+Looking good -- now we can pull in `reshape-preact-ssr`'s helper function that will hydrate the initial state as a vdom tree that's directly renderable by preact. We just need to pass it the compressed initial state, and a remapping back from the custom element name to the actual component as we required it on the client side.
 
 ```js
 const {render} = 'preact'
