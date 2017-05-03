@@ -80,7 +80,7 @@ And now in your html, you'd put down something like this:
 Ok, so you would get the rendered out `ul` with the classes and span elements you wanted, as expected. However, with this element, you definitely want to also client-side render it since it contains interactive elements. So if your client-side javascript, you run something like this:
 
 ```js
-const {render} = 'preact'
+const {render} = require('preact')
 const SortableList = require('./sortable-list')
 
 render(<SortableList />, document.body, document.querySelector('.sortable'))
@@ -89,7 +89,7 @@ render(<SortableList />, document.body, document.querySelector('.sortable'))
 Ok so this would find the right element and add the javascript interactivity on top. But it would also remove all the contents of your list as soon as the javascript render loads in, because you just rendered an empty element in the code above. Oops! Let's fix that:
 
 ```js
-const {render} = 'preact'
+const {render} = require('preact')
 const SortableList = require('./sortable-list')
 
 render(
@@ -133,7 +133,7 @@ You can see on the top level `ul`, we placed an additional data prop. If you ren
 Now let's pick up that compressed initial state from out client side javascript:
 
 ```js
-const {render} = 'preact'
+const {render} = require('preact')
 const SortableList = require('./sortable-list')
 const sortableEl = document.querySelector('.sortable')
 console.log(sortable.dataset.ssr)
@@ -142,7 +142,7 @@ console.log(sortable.dataset.ssr)
 Looking good -- now we can pull in `reshape-preact-ssr`'s helper function that will hydrate the initial state as a vdom tree that's directly renderable by preact. We just need to pass it the compressed initial state, and a remapping back from the custom element name to the actual component as we required it on the client side.
 
 ```js
-const {render} = 'preact'
+const {render} = require('preact')
 const SortableList = require('./sortable-list')
 const {hydrateInitialState} = require('reshape-preact-ssr')
 
@@ -157,7 +157,7 @@ console.log(vdom)
 You'll see that we have a full preact vdom ready to go, using the right components everywhere you needed them. Now the last step is just to render it!
 
 ```js
-const {render} = 'preact'
+const {render} = require('preact')
 const SortableList = require('./sortable-list')
 const {hydrateInitialState} = require('reshape-preact-ssr')
 
