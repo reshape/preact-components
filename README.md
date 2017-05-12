@@ -171,6 +171,56 @@ render(vdom, document.body, sortableEl)
 
 And that's it! You'll see no visual difference, as preact won't re-render existing html, but it will remove the `data-ssr` property and layer on the javascript interaction as soon as it loads. Perfect!
 
+### Passing Complex Data Into Components
+
+You might find yourself in a situation in which you want to pass a large js object into your component at some point. This works fluidly with client-only react, since its javascript -> javascript, but when you are rendering as static, the data is written as static and transmitted via http before being consumed by javascript. This causes two issues.
+
+First, html is parsed such that attribute values start and end with quotes. So if you have something like `<div data="{ foo: "bar" }"></div>`, you now have a parsing issue. HTML parsers will think that as soon as it hits the second double quote, you are done with your attribute value, and now you've got screwed up data and invalid html.
+
+Second, since you are going to be transmitting this data directly in your html, it is included directly in your http requests and will appear in your html. As such, it would be a benefit to compress the data to minimize size.
+
+There are two ways that this can be accomplished. The first is to only pass data that you need into your component, attribute by attribute, as such:
+
+```html
+<my-component
+  something='xxx'
+  somethingElse='yyy'
+  wowMoreThings='zzz'
+  lastThing='aaa'
+></my-component>
+```
+
+The second way is to serialize your full object, pass it in a single attribute, and deserialze on the other end. This library exposes simple and efficient serialization and deserialization functions that you can use for this purpose. Using [spike](https://spike.cf) as an example here:
+
+```js
+// app.js
+const render = require('reshape-preact-ssr')
+const MyComponent = require('./my-component')
+
+module.exports = {
+  reshape: htmlStandards({
+    locals: { encode: render.encode, data: { foo: 'bar' } },
+    appendPlugins: [render({ 'my-component': MyComponent })]
+  })
+}
+```
+
+```html
+<!-- index.html -->
+<my-component data='{{ encode(data) }}'></my-component>
+```
+
+```js
+// my-component.js
+const {h} = require('preact')
+const {decode} = require('reshape-preact-ssr')
+
+module.exports = ({ data }) => {
+  const _data = decode(data)
+  return (<p>JSON.stringify(_data)</p>)
+}
+```
+
 ### License & Contributing
 
 - Details on the license [can be found here](LICENSE.md)

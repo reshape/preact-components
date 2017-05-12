@@ -9,7 +9,7 @@
   "bugs": "https://github.com/reshape/reshape-preact-ssr/issues",
   "dependencies": {
     "preact": "^8.1.0",
-    "preact-render-to-string": "^3.6.1",
+    "preact-render-to-string": "^3.6.2",
     "reshape-parser": "^0.2.1",
     "reshape-plugin-util": "^0.2.1"
   },
@@ -23,8 +23,8 @@
   ],
   "devDependencies": {
     "ava": "^0.19.1",
-    "codecov": "^2.1.0",
-    "nyc": "^10.2.0",
+    "codecov": "^2.2.0",
+    "nyc": "^10.3.2",
     "reshape": "^0.4.1",
     "snazzy": "^7.0.0",
     "standard": "^10.0.2"

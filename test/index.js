@@ -65,3 +65,10 @@ test('initial state rehydration', (t) => {
       t.is(rendered, '<p>the value of foo is &quot;bar&quot;</p>')
     })
 })
+
+test('encode and decode', (t) => {
+  const data = JSON.stringify({ foo: 'bar' })
+  const encoded = ssr.encode(data)
+  const decoded = ssr.decode(encoded)
+  t.is(data, decoded)
+})
