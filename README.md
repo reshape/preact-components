@@ -144,7 +144,7 @@ Looking good -- now we can pull in `reshape-preact-components`'s helper function
 ```js
 const {render} = require('preact')
 const SortableList = require('./sortable-list')
-const {hydrateInitialState} = require('reshape-preact-components/browser')
+const {hydrateInitialState} = require('reshape-preact-components/lib/browser')
 
 const sortableEl = document.querySelector('.sortable')
 const vdom = hydrateInitialState(sortableEl.dataset.state, {
@@ -154,16 +154,16 @@ const vdom = hydrateInitialState(sortableEl.dataset.state, {
 console.log(vdom)
 ```
 
-Note that for client side code, we require from `reshape-preact-components/browser`. Although full es-module compatibility would allow a selective import that avoided additional dependencies, at the moment both node stable and many build systems are *not* yet es-module compatible, so it's safer to import from a separate namespace to ensure there is no extra bloat for the client-side code.
+Note that for client side code, we require from `reshape-preact-components/lib/browser`. Although full es-module compatibility would allow a selective import that avoided additional dependencies, at the moment both node stable and many build systems are *not* yet es-module compatible, so it's safer to import from a separate namespace to ensure there is no extra bloat for the client-side code.
 
-> *Note:* If you're using webpack2, you can require `reshape-preact-components/browser.esm` to get a version that uses es modules
+> *Note:* If you're using webpack2, you can require `reshape-preact-components/lib/browser.esm` to get a version that uses es modules
 
 In the console log, you'll see that we have a full preact vdom ready to go, using the right components everywhere you needed them. Now the last step is just to render it!
 
 ```js
 const {render} = require('preact')
 const SortableList = require('./sortable-list')
-const {hydrateInitialState} = require('reshape-preact-components/browser')
+const {hydrateInitialState} = require('reshape-preact-components/lib/browser')
 
 const sortableEl = document.querySelector('.sortable')
 const vdom = hydrateInitialState(sortableEl.dataset.state, {
@@ -217,7 +217,7 @@ module.exports = {
 ```js
 // my-component.js
 const {h} = require('preact')
-const {decode} = require('reshape-preact-components/browser')
+const {decode} = require('reshape-preact-components/lib/browser')
 
 module.exports = ({ data }) => {
   const _data = decode(data)
