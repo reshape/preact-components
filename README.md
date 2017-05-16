@@ -1,6 +1,6 @@
 # Reshape Preact SSR
 
-[![npm](https://img.shields.io/npm/v/preact-ssr.svg?style=flat-square)](https://npmjs.com/package/reshape-preact-ssr)
+[![npm](https://img.shields.io/npm/v/reshape-preact-ssr.svg?style=flat-square)](https://npmjs.com/package/reshape-preact-ssr)
 [![tests](https://img.shields.io/travis/reshape/preact-ssr.svg?style=flat-square)](https://travis-ci.org/reshape/preact-ssr?branch=master)
 [![dependencies](https://img.shields.io/david/reshape/preact-ssr.svg?style=flat-square)](https://david-dm.org/reshape/preact-ssr)
 [![coverage](https://img.shields.io/codecov/c/github/reshape/preact-ssr.svg?style=flat-square)](https://codecov.io/gh/reshape/preact-ssr)
@@ -173,7 +173,7 @@ const vdom = hydrateInitialState(sortableEl.dataset.state, {
 render(vdom, document.body, sortableEl)
 ```
 
-And that's it! You'll see no visual difference, as preact won't re-render existing html, but it will remove the `data-ssr` property and layer on the javascript interaction as soon as it loads. Perfect!
+And that's it! You'll see no visual difference, as preact won't re-render existing html, but it will remove the `data-state` property and layer on the javascript interaction as soon as it loads. Perfect!
 
 ### Passing Complex Data Into Components
 
