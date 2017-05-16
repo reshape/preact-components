@@ -1,6 +1,6 @@
-# Contributing to reshape-preact-ssr
+# Contributing to reshape-preact-components
 
-Hello there! First of all, thanks for being interested in reshape-preact-ssr and helping out. We all think you are awesome, and by contributing to open source projects, you are making the world a better place. That being said, there are a few ways to make the process of contributing code to reshape-preact-ssr smoother, detailed below:
+Hello there! First of all, thanks for being interested in reshape-preact-components and helping out. We all think you are awesome, and by contributing to open source projects, you are making the world a better place. That being said, there are a few ways to make the process of contributing code to reshape-preact-components smoother, detailed below:
 
 ### Filing Issues
 

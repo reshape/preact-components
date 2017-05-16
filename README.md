@@ -1,9 +1,9 @@
-# Reshape Preact SSR
+# Reshape Preact Components
 
-[![npm](https://img.shields.io/npm/v/reshape-preact-ssr.svg?style=flat-square)](https://npmjs.com/package/reshape-preact-ssr)
-[![tests](https://img.shields.io/travis/reshape/preact-ssr.svg?style=flat-square)](https://travis-ci.org/reshape/preact-ssr?branch=master)
-[![dependencies](https://img.shields.io/david/reshape/preact-ssr.svg?style=flat-square)](https://david-dm.org/reshape/preact-ssr)
-[![coverage](https://img.shields.io/codecov/c/github/reshape/preact-ssr.svg?style=flat-square)](https://codecov.io/gh/reshape/preact-ssr)
+[![npm](https://img.shields.io/npm/v/reshape-preact-components.svg?style=flat-square)](https://npmjs.com/package/reshape-preact-components)
+[![tests](https://img.shields.io/travis/reshape/preact-components.svg?style=flat-square)](https://travis-ci.org/reshape/preact-components?branch=master)
+[![dependencies](https://img.shields.io/david/reshape/preact-components.svg?style=flat-square)](https://david-dm.org/reshape/preact-components)
+[![coverage](https://img.shields.io/codecov/c/github/reshape/preact-components.svg?style=flat-square)](https://codecov.io/gh/reshape/preact-components)
 
 Render preact components to static html and use them like custom elements.
 
@@ -11,7 +11,7 @@ Render preact components to static html and use them like custom elements.
 
 ### Installation
 
-`yarn add reshape-preact-ssr`
+`yarn add reshape-preact-components`
 
 ### Usage
 
@@ -20,7 +20,7 @@ Setup is pretty simple -- just add the plugin to reshape and pass it an object w
 ```js
 const {h} = require('preact')
 const reshape = require('reshape')
-const ssr = require('reshape-preact-ssr')
+const renderComponents = require('reshape-preact-components')
 
 const MyComponent = ({ foo }) => {
   return h('p', {}, `the value of foo is "${foo}"`)
@@ -28,7 +28,7 @@ const MyComponent = ({ foo }) => {
 
 const html = "<my-component foo='bar' />"
 
-reshape({ plugins: [ssr({ 'my-component': MyComponent })] })
+reshape({ plugins: [renderComponents({ 'my-component': MyComponent })] })
   .process(html)
   .then((res) => {
     console.log(res.output()) // <p>the value of foo is "bar"</p>
@@ -56,13 +56,13 @@ export default class SortableList {
 }
 ```
 
-Now you set up the component through the ssr plugin as such:
+Now you set up the component through the plugin as such:
 
 ```js
-const ssr = require('reshape-preact-ssr')
+const renderComponents = require('reshape-preact-components')
 const SortableList = require('./sortable-list')
 
-ssr({ 'sortable-list': SortableList })
+renderComponents({ 'sortable-list': SortableList })
 ```
 
 And now in your html, you'd put down something like this:
@@ -103,7 +103,7 @@ render(
 )
 ```
 
-Ok so this works, but now we have some seriously non-DRY code. Now our markup has to be repeated both in our html for the initial static render, and in the client-side js for the client render. Luckily, reshape-preact-ssr has got your back. By default, it takes the initial html you used to render your preact element, parsed into a reshape AST and compressed as efficiently as possible, and gives it to your element as a prop called `_ssr`. It also provides a helper that you can use to decompress and hydrate it into a vdom tree that can be directly rendered by preact. So let's take advantage of this in our code and completely cut out all repetition - starting with our component.
+Ok so this works, but now we have some seriously non-DRY code. Now our markup has to be repeated both in our html for the initial static render, and in the client-side js for the client render. Luckily, `reshape-preact-components` has got your back. By default, it takes the initial html you used to render your preact element, parsed into a reshape AST and compressed as efficiently as possible, and gives it to your element as a prop called `_state`. It also provides a helper that you can use to decompress and hydrate it into a vdom tree that can be directly rendered by preact. So let's take advantage of this in our code and completely cut out all repetition - starting with our component.
 
 What we'll do here is put our compressed initial state on a data attribute so that our client-side js can pick it up and hydrate:
 
@@ -111,7 +111,7 @@ What we'll do here is put our compressed initial state on a data attribute so th
 export default class SortableList {
   render () {
     return (
-      <ul className='sortable' data-state={this.props._ssr}>
+      <ul className='sortable' data-state={this.props._state}>
         <span className='sort-icon' />
         {this.props.children}
       </ul>
@@ -139,12 +139,12 @@ const sortableEl = document.querySelector('.sortable')
 console.log(sortable.dataset.state)
 ```
 
-Looking good -- now we can pull in `reshape-preact-ssr`'s helper function that will hydrate the initial state as a vdom tree that's directly renderable by preact. We just need to pass it the compressed initial state, and a remapping back from the custom element name to the actual component as we required it on the client side.
+Looking good -- now we can pull in `reshape-preact-components`'s helper function that will hydrate the initial state as a vdom tree that's directly renderable by preact. We just need to pass it the compressed initial state, and a remapping back from the custom element name to the actual component as we required it on the client side.
 
 ```js
 const {render} = require('preact')
 const SortableList = require('./sortable-list')
-const {hydrateInitialState} = require('reshape-preact-ssr/browser')
+const {hydrateInitialState} = require('reshape-preact-components/browser')
 
 const sortableEl = document.querySelector('.sortable')
 const vdom = hydrateInitialState(sortableEl.dataset.state, {
@@ -154,16 +154,16 @@ const vdom = hydrateInitialState(sortableEl.dataset.state, {
 console.log(vdom)
 ```
 
-Note that for client side code, we require from `reshape-preact-ssr/browser`. Although full es-module compatibility would allow a selective import that avoided additional dependencies, at the moment both node stable and many build systems are *not* yet es-module compatible, so it's safer to import from a separate namespace to ensure there is no extra bloat for the client-side code.
+Note that for client side code, we require from `reshape-preact-components/browser`. Although full es-module compatibility would allow a selective import that avoided additional dependencies, at the moment both node stable and many build systems are *not* yet es-module compatible, so it's safer to import from a separate namespace to ensure there is no extra bloat for the client-side code.
 
-> *Note:* If you're using webpack2, you can require `reshape-preact-ssr/browser.esm` to get a version that uses es modules
+> *Note:* If you're using webpack2, you can require `reshape-preact-components/browser.esm` to get a version that uses es modules
 
 In the console log, you'll see that we have a full preact vdom ready to go, using the right components everywhere you needed them. Now the last step is just to render it!
 
 ```js
 const {render} = require('preact')
 const SortableList = require('./sortable-list')
-const {hydrateInitialState} = require('reshape-preact-ssr')
+const {hydrateInitialState} = require('reshape-preact-components/browser')
 
 const sortableEl = document.querySelector('.sortable')
 const vdom = hydrateInitialState(sortableEl.dataset.state, {
@@ -198,13 +198,13 @@ The second way is to serialize your full object, pass it in a single attribute, 
 
 ```js
 // app.js
-const render = require('reshape-preact-ssr')
+const renderComponents = require('reshape-preact-components')
 const MyComponent = require('./my-component')
 
 module.exports = {
   reshape: htmlStandards({
     locals: { encode: render.encode, data: { foo: 'bar' } },
-    appendPlugins: [render({ 'my-component': MyComponent })]
+    appendPlugins: [renderComponents({ 'my-component': MyComponent })]
   })
 }
 ```
@@ -217,7 +217,7 @@ module.exports = {
 ```js
 // my-component.js
 const {h} = require('preact')
-const {decode} = require('reshape-preact-ssr/browser')
+const {decode} = require('reshape-preact-components/browser')
 
 module.exports = ({ data }) => {
   const _data = decode(data)

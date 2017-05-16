@@ -1,5 +1,5 @@
 {
-  "name": "reshape-preact-ssr",
+  "name": "reshape-preact-components",
   "description": "server render preact components and use them like custom elements",
   "version": "0.4.0",
   "author": "reshape",
@@ -7,7 +7,7 @@
     "verbose": "true"
   },
   "browser": "lib/browser.js",
-  "bugs": "https://github.com/reshape/reshape-preact-ssr/issues",
+  "bugs": "https://github.com/reshape/reshape-preact-components/issues",
   "dependencies": {
     "preact": "^8.1.0",
     "preact-render-to-string": "^3.6.2",
@@ -34,18 +34,18 @@
   "engines": {
     "node": ">= 6"
   },
-  "homepage": "https://github.com/reshape/reshape-preact-ssr",
+  "homepage": "https://github.com/reshape/reshape-preact-components",
   "keywords": [
     "custom-elements",
     "preact",
     "react",
     "reshape-plugin",
     "server-side-render",
-    "ssr"
+    "components"
   ],
   "license": "MIT",
   "main": "lib",
-  "repository": "reshape/reshape-preact-ssr",
+  "repository": "reshape/reshape-preact-components",
   "scripts": {
     "build": "rm -rf lib && mkdir lib && cp src/index.js lib && cp src/serialize.js lib && cp src/reshape-ast-to-vdom.js lib && rollup -c rollup.browser.js && rollup -c rollup.ast-vdom.js",
     "codecov": "nyc report -r lcovonly && codecov",
