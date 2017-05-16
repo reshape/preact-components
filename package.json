@@ -1,7 +1,7 @@
 {
   "name": "reshape-preact-components",
   "description": "server render preact components and use them like custom elements",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "author": "reshape",
   "ava": {
     "verbose": "true"
