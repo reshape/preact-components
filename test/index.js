@@ -2,7 +2,7 @@ const preact = require('preact')
 const h = preact.h
 const {render} = require('preact-render-to-string')
 const reshape = require('reshape')
-const ssr = require('..')
+const components = require('..')
 const test = require('ava')
 const {JSDOM} = require('jsdom')
 const fs = require('fs')
@@ -16,7 +16,7 @@ test('basic', (t) => {
 
   const html = "<my-component foo='bar' />"
 
-  return reshape({ plugins: [ssr({ 'my-component': MyComponent })] })
+  return reshape({ plugins: [components({ 'my-component': MyComponent })] })
     .process(html)
     .then((res) => {
       t.is(res.output(), '<p>the value of foo is "bar"</p>')
@@ -30,7 +30,7 @@ test('multi element, different props', (t) => {
 
   const html = "<my-component foo='bar' /><p>wow</p><my-component foo='wow' />"
 
-  return reshape({ plugins: [ssr({ 'my-component': MyComponent })] })
+  return reshape({ plugins: [components({ 'my-component': MyComponent })] })
     .process(html)
     .then((res) => {
       t.is(res.output(), '<p>the value of foo is "bar"</p><p>wow</p><p>the value of foo is "wow"</p>')
@@ -48,7 +48,7 @@ test('renders children', (t) => {
 
   const html = "<my-component foo='bar'><p>wow</p><div><c2></c2></div></my-component>"
 
-  return reshape({ plugins: [ssr({ 'my-component': MyComponent, c2 })] })
+  return reshape({ plugins: [components({ 'my-component': MyComponent, c2 })] })
     .process(html)
     .then((res) => {
       t.is(res.output(), '<div class="parent">hello<p>wow</p><div><div class="wow">hello from c2</div></div></div>')
@@ -57,14 +57,14 @@ test('renders children', (t) => {
 
 test('initial state rehydration', (t) => {
   const component = `
-    function MyComponent ({ foo, _ssr }) {
-      return preact.h('p', { 'data-state': _ssr }, 'the value of foo is "' + foo + '"')
+    function MyComponent ({ foo, _state }) {
+      return preact.h('p', { 'data-state': _state }, 'the value of foo is "' + foo + '"')
     }
   `
   const MyComponent = eval(`${component}; MyComponent`)
   const html = "<my-component foo='bar' />"
 
-  return reshape({ plugins: [ssr({ 'my-component': MyComponent })] })
+  return reshape({ plugins: [components({ 'my-component': MyComponent })] })
     .process(html)
     .then((res) => {
       const dom = new JSDOM(`
@@ -89,8 +89,8 @@ test('initial state rehydration', (t) => {
 
 test('node encode and decode', (t) => {
   const data = JSON.stringify({ foo: 'bar' })
-  const encoded = ssr.encode(data)
-  const decoded = ssr.decode(encoded)
+  const encoded = components.encode(data)
+  const decoded = components.decode(encoded)
   t.is(data, decoded)
 })
 

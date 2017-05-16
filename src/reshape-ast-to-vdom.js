@@ -8,8 +8,8 @@ export default function toVnode (components, node, originalHtml) {
   for (let k in node.attrs) {
     props[k] = node.attrs[k].map((n) => n.content).join('')
   }
-  // if there is a compressed original source, add it as _ssr prop
-  if (originalHtml) { props._ssr = originalHtml }
+  // if there is a compressed original source, add it as _state prop
+  if (originalHtml) { props._state = originalHtml }
   // content is either a string, a subtree, or there isn't any
   if (typeof node.content === 'string') {
     return h(name, props, node.content)
