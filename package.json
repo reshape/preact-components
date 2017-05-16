@@ -6,6 +6,7 @@
   "ava": {
     "verbose": "true"
   },
+  "browser": "lib/browser.js",
   "bugs": "https://github.com/reshape/reshape-preact-ssr/issues",
   "dependencies": {
     "preact": "^8.1.0",
@@ -13,33 +14,44 @@
     "reshape-parser": "^0.2.1",
     "reshape-plugin-util": "^0.2.1"
   },
-  "keywords": [
-    "reshape-plugin",
-    "react",
-    "preact",
-    "server-side-render",
-    "ssr",
-    "custom-elements"
-  ],
   "devDependencies": {
     "ava": "^0.19.1",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-env": "^1.4.0",
     "codecov": "^2.2.0",
+    "jsdom": "^10.1.0",
     "nyc": "^10.3.2",
     "reshape": "^0.4.1",
+    "rollup": "^0.41.6",
+    "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-commonjs": "^8.0.2",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-uglify-es": "^0.0.1",
     "snazzy": "^7.0.0",
-    "standard": "^10.0.2"
+    "standard": "^10.0.2",
+    "webpack": "^2.5.1"
   },
   "engines": {
     "node": ">= 6"
   },
   "homepage": "https://github.com/reshape/reshape-preact-ssr",
+  "keywords": [
+    "custom-elements",
+    "preact",
+    "react",
+    "reshape-plugin",
+    "server-side-render",
+    "ssr"
+  ],
   "license": "MIT",
   "main": "lib",
   "repository": "reshape/reshape-preact-ssr",
   "scripts": {
+    "build": "rm -rf lib && mkdir lib && cp src/index.js lib && cp src/serialize.js lib && cp src/reshape-ast-to-vdom.js lib && rollup -c rollup.browser.js && rollup -c rollup.ast-vdom.js",
     "codecov": "nyc report -r lcovonly && codecov",
     "coverage": "nyc ava && nyc report --reporter=html && open ./coverage/index.html",
     "lint": "standard | snazzy",
-    "test": "nyc ava"
+    "test": "npm run build && nyc ava",
+    "version": "npm run build"
   }
 }

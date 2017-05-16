@@ -111,7 +111,7 @@ What we'll do here is put our compressed initial state on a data attribute so th
 export default class SortableList {
   render () {
     return (
-      <ul className='sortable' data-ssr={this.props._ssr}>
+      <ul className='sortable' data-state={this.props._ssr}>
         <span className='sort-icon' />
         {this.props.children}
       </ul>
@@ -127,7 +127,7 @@ export default class SortableList {
 You can see on the top level `ul`, we placed an additional data prop. If you render this to the page, you'll see something like this:
 
 ```html
-<ul class='sortable' data-ssr='3nko2ir2cR3i2nr2croi23nrc23='></ul>
+<ul class='sortable' data-state='3nko2ir2cR3i2nr2croi23nrc23='></ul>
 ```
 
 Now let's pick up that compressed initial state from out client side javascript:
@@ -136,7 +136,7 @@ Now let's pick up that compressed initial state from out client side javascript:
 const {render} = require('preact')
 const SortableList = require('./sortable-list')
 const sortableEl = document.querySelector('.sortable')
-console.log(sortable.dataset.ssr)
+console.log(sortable.dataset.state)
 ```
 
 Looking good -- now we can pull in `reshape-preact-ssr`'s helper function that will hydrate the initial state as a vdom tree that's directly renderable by preact. We just need to pass it the compressed initial state, and a remapping back from the custom element name to the actual component as we required it on the client side.
@@ -144,17 +144,21 @@ Looking good -- now we can pull in `reshape-preact-ssr`'s helper function that w
 ```js
 const {render} = require('preact')
 const SortableList = require('./sortable-list')
-const {hydrateInitialState} = require('reshape-preact-ssr')
+const {hydrateInitialState} = require('reshape-preact-ssr/browser')
 
 const sortableEl = document.querySelector('.sortable')
-const vdom = hydrateInitialState(sortableEl.dataset.ssr, {
+const vdom = hydrateInitialState(sortableEl.dataset.state, {
   'sortable-list': SortableList
 })
 
 console.log(vdom)
 ```
 
-You'll see that we have a full preact vdom ready to go, using the right components everywhere you needed them. Now the last step is just to render it!
+Note that for client side code, we require from `reshape-preact-ssr/browser`. Although full es-module compatibility would allow a selective import that avoided additional dependencies, at the moment both node stable and many build systems are *not* yet es-module compatible, so it's safer to import from a separate namespace to ensure there is no extra bloat for the client-side code.
+
+> *Note:* If you're using webpack2, you can require `reshape-preact-ssr/browser.esm` to get a version that uses es modules
+
+In the console log, you'll see that we have a full preact vdom ready to go, using the right components everywhere you needed them. Now the last step is just to render it!
 
 ```js
 const {render} = require('preact')
@@ -162,7 +166,7 @@ const SortableList = require('./sortable-list')
 const {hydrateInitialState} = require('reshape-preact-ssr')
 
 const sortableEl = document.querySelector('.sortable')
-const vdom = hydrateInitialState(sortableEl.dataset.ssr, {
+const vdom = hydrateInitialState(sortableEl.dataset.state, {
   'sortable-list': SortableList
 })
 
@@ -213,7 +217,7 @@ module.exports = {
 ```js
 // my-component.js
 const {h} = require('preact')
-const {decode} = require('reshape-preact-ssr')
+const {decode} = require('reshape-preact-ssr/browser')
 
 module.exports = ({ data }) => {
   const _data = decode(data)

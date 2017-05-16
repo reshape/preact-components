@@ -1,8 +1,13 @@
-const {h} = require('preact')
+const preact = require('preact')
+const h = preact.h
 const {render} = require('preact-render-to-string')
 const reshape = require('reshape')
 const ssr = require('..')
 const test = require('ava')
+const {JSDOM} = require('jsdom')
+const fs = require('fs')
+const path = require('path')
+const webpack = require('webpack')
 
 test('basic', (t) => {
   const MyComponent = ({ foo }) => {
@@ -51,24 +56,75 @@ test('renders children', (t) => {
 })
 
 test('initial state rehydration', (t) => {
-  const MyComponent = ({ foo, _ssr }) => {
-    return h('p', { 'data-ssr': _ssr }, `the value of foo is "${foo}"`)
-  }
-
+  const component = `
+    function MyComponent ({ foo, _ssr }) {
+      return preact.h('p', { 'data-state': _ssr }, 'the value of foo is "' + foo + '"')
+    }
+  `
+  const MyComponent = eval(`${component}; MyComponent`)
   const html = "<my-component foo='bar' />"
 
   return reshape({ plugins: [ssr({ 'my-component': MyComponent })] })
     .process(html)
     .then((res) => {
-      const compressed = res.output().match(/data-ssr="(.*?)"/)[1]
-      const rendered = render(ssr.hydrateInitialState(compressed, { 'my-component': MyComponent }))
-      t.is(rendered, '<p>the value of foo is &quot;bar&quot;</p>')
+      const dom = new JSDOM(`
+        ${res.output()}
+        <script>
+          // require preact
+          ${fs.readFileSync(path.join(__dirname, '../node_modules/preact/dist/preact.js'))}
+          // require reshapePreact
+          ${fs.readFileSync(path.join(__dirname, '../lib/browser.js'))}
+          // our custom component
+          ${component}
+          // implementation
+          var el = document.querySelector('p')
+          window.out = reshapePreact.hydrateInitialState(el.getAttribute('data-state'), {
+            'my-component': MyComponent
+          })
+        </script>
+      `, { runScripts: 'dangerously' })
+      t.is(render(dom.window.out), '<p>the value of foo is &quot;bar&quot;</p>')
     })
 })
 
-test('encode and decode', (t) => {
+test('node encode and decode', (t) => {
   const data = JSON.stringify({ foo: 'bar' })
   const encoded = ssr.encode(data)
   const decoded = ssr.decode(encoded)
   t.is(data, decoded)
+})
+
+test('browser encode and decode', (t) => {
+  const data = JSON.stringify({ foo: 'bar' })
+  const dom = new JSDOM(`
+    <script>
+      // require preact, because its referenced in the browser lib
+      ${fs.readFileSync(path.join(__dirname, '../node_modules/preact/dist/preact.js'))}
+      // require browser lib
+      ${fs.readFileSync(path.join(__dirname, '../lib/browser.js'))}
+      // implementation
+      var encoded = reshapePreact.encode(${data})
+      window.decoded = reshapePreact.decode(encoded)
+    </script>
+  `, { runScripts: 'dangerously' })
+  t.is(dom.window.decoded.foo, 'bar')
+})
+
+// webpack erroring with jsdom for some reason
+test.skip.cb('webpack loads es module version in browser', (t) => {
+  const fixturesPath = path.join(__dirname, 'fixtures')
+  webpack({
+    entry: path.join(fixturesPath, 'entry'),
+    output: { filename: 'bundle.js', path: fixturesPath}
+  }, (err, stats) => {
+    // console.log(fs.readFileSync(path.join(fixturesPath, 'bundle.js'), 'utf8'))
+    const dom = new JSDOM(`
+      <script>
+        ${fs.readFileSync(path.join(fixturesPath, 'bundle.js'), 'utf8')}
+      </script>
+    `, { runScripts: 'dangerously' })
+    console.log(dom.window.result)
+    fs.unlinkSync(path.join(fixturesPath, 'bundle.js'))
+    t.end()
+  })
 })
