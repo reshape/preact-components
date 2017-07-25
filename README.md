@@ -136,7 +136,7 @@ Now let's pick up that compressed initial state from out client side javascript:
 const {render} = require('preact')
 const SortableList = require('./sortable-list')
 const sortableEl = document.querySelector('.sortable')
-console.log(sortable.dataset.state)
+console.log(sortableEl.dataset.state)
 ```
 
 Looking good -- now we can pull in `reshape-preact-components`'s helper function that will hydrate the initial state as a vdom tree that's directly renderable by preact. We just need to pass it the compressed initial state, and a remapping back from the custom element name to the actual component as we required it on the client side.
