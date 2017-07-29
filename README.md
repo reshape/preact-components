@@ -203,7 +203,7 @@ const MyComponent = require('./my-component')
 
 module.exports = {
   reshape: htmlStandards({
-    locals: { encode: render.encode, data: { foo: 'bar' } },
+    locals: { encode: renderComponents.encode, data: { foo: 'bar' } },
     appendPlugins: [renderComponents({ 'my-component': MyComponent })]
   })
 }
@@ -218,6 +218,19 @@ module.exports = {
 // my-component.js
 const {h} = require('preact')
 const {decode} = require('reshape-preact-components/lib/browser')
+
+module.exports = ({ data }) => {
+  const _data = decode(data)
+  return (<p>JSON.stringify(_data)</p>)
+}
+```
+
+If your component is only rendered server-side, you should use `decode` exported in the main package, as seen below:
+
+```js
+// my-component.js
+const {h} = require('preact')
+const {decode} = require('reshape-preact-components')
 
 module.exports = ({ data }) => {
   const _data = decode(data)
