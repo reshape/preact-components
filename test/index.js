@@ -100,14 +100,14 @@ test('initial state rehydration', t => {
 })
 
 test('node encode and decode', t => {
-  const data = JSON.stringify({ foo: 'bar' })
+  const data = JSON.stringify({ foo: '✓ à la mode' })
   const encoded = components.encode(data)
   const decoded = components.decode(encoded)
   t.is(data, decoded)
 })
 
 test('browser encode and decode', t => {
-  const data = JSON.stringify({ foo: 'bar' })
+  const data = JSON.stringify({ foo: '✓ à la mode' })
   const dom = new JSDOM(
     `
     <script>
@@ -124,10 +124,10 @@ test('browser encode and decode', t => {
   `,
     { runScripts: 'dangerously' }
   )
-  t.is(dom.window.decoded.foo, 'bar')
+  t.is(dom.window.decoded.foo, '✓ à la mode')
 })
 
-test.only('custom in-scope data', t => {
+test.skip('custom in-scope data', t => {
   const MyComponent = ({ foo }) => {
     return h('p', {}, `the value of foo is "${test}"`)
   }
