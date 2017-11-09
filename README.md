@@ -217,7 +217,7 @@ module.exports = {
 ```js
 // my-component.js
 const {h} = require('preact')
-const {decode} = require('reshape-preact-components/lib/browser')
+const {decode} = require('reshape-preact-components')
 
 module.exports = ({ data }) => {
   const _data = decode(data)
