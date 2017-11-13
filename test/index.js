@@ -100,7 +100,7 @@ test('initial state rehydration', t => {
 })
 
 test('node encode and decode', t => {
-  const data = JSON.stringify({ foo: '✓ à la mode' })
+  const data = JSON.stringify({ foo: '✓ à la mode"\'' })
   const encoded = components.encode(data)
   const decoded = components.decode(encoded)
   t.is(data, decoded)
