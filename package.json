@@ -1,13 +1,14 @@
 {
   "name": "reshape-preact-components",
-  "description": "server render preact components and use them like custom elements",
+  "description":
+    "server render preact components and use them like custom elements",
   "version": "0.6.0",
   "author": "reshape",
   "ava": {
     "verbose": "true"
   },
   "browser": "lib/browser.js",
-  "bugs": "https://github.com/reshape/reshape-preact-components/issues",
+  "bugs": "https://github.com/reshape/preact-components/issues",
   "dependencies": {
     "preact": "^8.1.0",
     "preact-render-to-string": "^3.6.2",
@@ -34,7 +35,7 @@
   "engines": {
     "node": ">= 6"
   },
-  "homepage": "https://github.com/reshape/reshape-preact-components",
+  "homepage": "https://github.com/reshape/preact-components",
   "keywords": [
     "custom-elements",
     "preact",
@@ -45,11 +46,13 @@
   ],
   "license": "MIT",
   "main": "lib",
-  "repository": "reshape/reshape-preact-components",
+  "repository": "reshape/preact-components",
   "scripts": {
-    "build": "rm -rf lib && mkdir lib && cp src/index.js lib && cp src/serialize.js lib && cp src/reshape-ast-to-vdom.js lib && rollup -c rollup.browser.js && rollup -c rollup.ast-vdom.js",
+    "build":
+      "rm -rf lib && mkdir lib && cp src/index.js lib && cp src/serialize.js lib && cp src/reshape-ast-to-vdom.js lib && rollup -c rollup.browser.js && rollup -c rollup.ast-vdom.js",
     "codecov": "nyc report -r lcovonly && codecov",
-    "coverage": "nyc ava && nyc report --reporter=html && open ./coverage/index.html",
+    "coverage":
+      "nyc ava && nyc report --reporter=html && open ./coverage/index.html",
     "lint": "standard | snazzy",
     "test": "npm run build && nyc ava",
     "version": "npm run build"
